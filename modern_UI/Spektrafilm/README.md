@@ -373,8 +373,12 @@ other; if two need to agree, that belongs in `Session`.
 - **A new Layer 2 control:** add the field to `Adjustments`, map it in
   `uniforms`, add the uniform to *both* `Layer2Uniforms` (Swift and Metal, same
   order), apply it in the `layer2` kernel, add a slider.
-- **A new film stock:** drop the profile in the engine, run
-  `Tools/gen-catalog.py` (covers go in `Resources/FilmCovers/<id>.jpg`).
+- **A new film stock:** drop the profile in the engine, add its card copy and
+  scene tags to `modern_UI/stock_guide.json`, run `engine/tests/stock_traits.py`
+  (after `engine/build.sh dylib`) for its traits, then `Tools/gen-catalog.py`
+  (covers go in `Resources/FilmCovers/<id>.jpg`; card art, when drawn, in
+  `modern_UI/stock_art/<id>.svg`). `FilmGuideTests` fails until the copy and
+  the traits are there.
 - **A new file:** run `Tools/gen-project.py`; the project lists files
   explicitly and the generator is deterministic.
 

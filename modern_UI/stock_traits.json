@@ -1,0 +1,214 @@
+{
+  "measured": "2026-10-13",
+  "stocks": {
+    "fujifilm_c200": {
+      "contrast": 1.65875081597716,
+      "grain": 42.242456321124415,
+      "latitude": 11.23691445716982,
+      "measuredWith": "fujifilm_crystal_archive_typeii",
+      "saturation": 1.650519448466555
+    },
+    "fujifilm_crystal_archive_typeii": {
+      "contrast": 1.3908665885446012,
+      "measuredWith": "kodak_portra_400",
+      "saturation": 1.3400709255412449
+    },
+    "fujifilm_neopan_acros_100_ii": {
+      "contrast": 1.2182317938028988,
+      "grain": 33.71581958089536,
+      "latitude": 13.76362005244167,
+      "measuredWith": "ilford_multigrade_iv_rc"
+    },
+    "fujifilm_pro_400h": {
+      "contrast": 1.425721482515322,
+      "grain": 31.148346091330758,
+      "latitude": 10.771055571100124,
+      "measuredWith": "fujifilm_crystal_archive_typeii",
+      "saturation": 1.3668974121377007
+    },
+    "fujifilm_provia_100f": {
+      "contrast": 1.2925368660330596,
+      "grain": 15.09850172954138,
+      "latitude": 6.3354926490747765,
+      "measuredWith": "scan",
+      "saturation": 1.0052264864382403
+    },
+    "fujifilm_velvia_100": {
+      "contrast": 1.4308774656387946,
+      "grain": 15.545218913644845,
+      "latitude": 5.649616867299298,
+      "measuredWith": "scan",
+      "saturation": 1.3312094166966562
+    },
+    "fujifilm_xtra_400": {
+      "contrast": 1.7610138847538708,
+      "grain": 47.7447545766367,
+      "latitude": 11.657773432720251,
+      "measuredWith": "fujifilm_crystal_archive_typeii",
+      "saturation": 1.785982574405607
+    },
+    "ilford_hp5_plus_400": {
+      "contrast": 1.3386002106695836,
+      "grain": 76.93592206405849,
+      "latitude": 14.295500800053054,
+      "measuredWith": "ilford_multigrade_iv_rc"
+    },
+    "ilford_multigrade_iv_rc": {
+      "contrast": 1.1955880047655334,
+      "measuredWith": "kodak_tri_x_400"
+    },
+    "kodak_2383": {
+      "contrast": 1.359429978965495,
+      "measuredWith": "kodak_portra_400",
+      "saturation": 1.2817627981676367
+    },
+    "kodak_2393": {
+      "contrast": 1.4539723269199876,
+      "measuredWith": "kodak_portra_400",
+      "saturation": 1.321876338682525
+    },
+    "kodak_ektachrome_100": {
+      "contrast": 1.2000341930548648,
+      "grain": 16.748872223741795,
+      "latitude": 6.771585311944432,
+      "measuredWith": "scan",
+      "saturation": 0.9779296365583686
+    },
+    "kodak_ektacolor_edge": {
+      "contrast": 1.5085111765648622,
+      "measuredWith": "kodak_portra_400",
+      "saturation": 1.4676604125054487
+    },
+    "kodak_ektar_100": {
+      "contrast": 1.3930747314871927,
+      "grain": 31.676774481110634,
+      "latitude": 11.15227130033622,
+      "measuredWith": "kodak_portra_endura",
+      "saturation": 1.4480238974751327
+    },
+    "kodak_endura_premier": {
+      "contrast": 1.7677658845687017,
+      "measuredWith": "kodak_portra_400",
+      "saturation": 1.6697445801077446
+    },
+    "kodak_gold_200": {
+      "contrast": 1.3358266062399853,
+      "grain": 28.803789774189273,
+      "latitude": 9.660876129146683,
+      "measuredWith": "kodak_portra_endura",
+      "saturation": 1.30300267516993
+    },
+    "kodak_kodachrome_64": {
+      "contrast": 1.1434647821640718,
+      "grain": 15.070689775922299,
+      "latitude": 6.398114985870978,
+      "measuredWith": "scan",
+      "saturation": 0.944028756335333
+    },
+    "kodak_portra_160": {
+      "contrast": 1.2968830622686167,
+      "grain": 29.032129731782554,
+      "latitude": 11.313316205302005,
+      "measuredWith": "kodak_portra_endura",
+      "saturation": 1.2185124475150106
+    },
+    "kodak_portra_400": {
+      "contrast": 1.2993175872150722,
+      "grain": 30.94863865829674,
+      "latitude": 11.64112640283016,
+      "measuredWith": "kodak_portra_endura",
+      "saturation": 1.278506654085134
+    },
+    "kodak_portra_800": {
+      "contrast": 1.2606645140078054,
+      "grain": 31.02773469285853,
+      "latitude": 11.195862881948127,
+      "measuredWith": "kodak_portra_endura",
+      "saturation": 1.254715514894349
+    },
+    "kodak_portra_800_push1": {
+      "contrast": 1.5601166240978648,
+      "grain": 37.927686241055106,
+      "latitude": 11.098890755767957,
+      "measuredWith": "kodak_portra_endura",
+      "saturation": 1.6650696265222498
+    },
+    "kodak_portra_800_push2": {
+      "contrast": 1.7659996107764213,
+      "grain": 45.63373420053537,
+      "latitude": 9.83375980109324,
+      "measuredWith": "kodak_portra_endura",
+      "saturation": 1.9388709547029725
+    },
+    "kodak_portra_endura": {
+      "contrast": 1.2993175872150722,
+      "measuredWith": "kodak_portra_400",
+      "saturation": 1.278506654085134
+    },
+    "kodak_supra_endura": {
+      "contrast": 1.4169247660435351,
+      "measuredWith": "kodak_portra_400",
+      "saturation": 1.355044191227452
+    },
+    "kodak_tmax_100": {
+      "contrast": 1.2075774178321348,
+      "grain": 37.26812888698443,
+      "latitude": 15.247677821682649,
+      "measuredWith": "ilford_multigrade_iv_rc"
+    },
+    "kodak_tri_x_400": {
+      "contrast": 1.1955880047655334,
+      "grain": 78.57986397877337,
+      "latitude": 15.281339058155458,
+      "measuredWith": "ilford_multigrade_iv_rc"
+    },
+    "kodak_ultra_endura": {
+      "contrast": 1.651504573204922,
+      "measuredWith": "kodak_portra_400",
+      "saturation": 1.441848397009155
+    },
+    "kodak_ultramax_400": {
+      "contrast": 1.2777082420034747,
+      "grain": 30.839486962497126,
+      "latitude": 11.158199337633786,
+      "measuredWith": "kodak_portra_endura",
+      "saturation": 1.2745279951893083
+    },
+    "kodak_verita_200d": {
+      "contrast": 1.2074296249053018,
+      "grain": 29.26846859369691,
+      "latitude": 11.37144528208822,
+      "measuredWith": "kodak_2383",
+      "saturation": 1.1514897998962534
+    },
+    "kodak_vision3_200t": {
+      "contrast": 1.2297216216800149,
+      "grain": 30.215441086135012,
+      "latitude": 12.08487215566663,
+      "measuredWith": "kodak_2383",
+      "saturation": 1.114473821585518
+    },
+    "kodak_vision3_250d": {
+      "contrast": 1.2705641050990593,
+      "grain": 34.40387780484619,
+      "latitude": 12.37991907768676,
+      "measuredWith": "kodak_2383",
+      "saturation": 1.189193049374557
+    },
+    "kodak_vision3_500t": {
+      "contrast": 1.2696402524745836,
+      "grain": 34.85366451114554,
+      "latitude": 12.446578029321707,
+      "measuredWith": "kodak_2383",
+      "saturation": 1.0838599501587531
+    },
+    "kodak_vision3_50d": {
+      "contrast": 1.2608474131544294,
+      "grain": 29.15212815201408,
+      "latitude": 11.716958407948328,
+      "measuredWith": "kodak_2383",
+      "saturation": 1.1698059732705708
+    }
+  },
+  "version": 2
+}

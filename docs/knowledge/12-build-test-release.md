@@ -57,7 +57,8 @@ python3 Tools/gen-project.py --check  # 只检查工程是否过期
 
 | 脚本 | 作用 |
 |---|---|
-| `gen-catalog.py` | 从 `engine/resources/profiles`、`engine/resources_product/profiles`（标 `monochrome`）、`print_luts.json`、`modern_UI/film_covers` 生成 `Resources/StockCatalog.json` 和 `FilmCovers/` |
+| `gen-catalog.py` | 从 `engine/resources/profiles`、`engine/resources_product/profiles`（标 `monochrome`）、`print_luts.json`、`modern_UI/film_covers`，以及卡片数据 `modern_UI/stock_guide.json`、`modern_UI/stock_traits.json`、`modern_UI/stock_art/` 生成 `Resources/StockCatalog.json`、`FilmCovers/` 和 `StockArt/`；未知的场景标签直接报错 |
+| `engine/tests/stock_traits.py` | 测量每款胶片和相纸的反差、饱和度、宽容度、颗粒，写 `modern_UI/stock_traits.json`；只需要 `engine/build.sh dylib`，不需要 Python 参考实现。之后要重跑 `gen-catalog.py` |
 | `bundle-licenses.sh` | 把 GPL-3.0、CC BY-SA 4.0、Apache-2.0 文本拷进 `Resources/Licenses` |
 | `check-bundle-resources.sh` | 应用目标的构建前阶段，也可单独运行：引擎资源或许可证文本缺失时让构建失败 |
 | `make-smoke.py` | 生成 1 MP 的线性 ProPhoto 冒烟测试图 |

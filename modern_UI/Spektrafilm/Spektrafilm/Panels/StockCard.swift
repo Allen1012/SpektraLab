@@ -19,6 +19,8 @@ struct StockCard: View {
     /// The paper list's fast-flip note, which used to be the row's whole
     /// tooltip; nil when the fast flip is off or the paper has no baked table.
     var fastFlipLine: String? = nil
+    /// Why the paper is not in use with the film on the canvas, if it is not.
+    var note: String? = nil
 
     static let width: CGFloat = 280
 
@@ -49,6 +51,12 @@ struct StockCard: View {
             }
             traits
             facts
+            if let note {
+                Text(note)
+                    .font(Theme.Font.meta)
+                    .foregroundStyle(Theme.accent)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
         }
         .padding(12)
         .frame(width: Self.width, alignment: .leading)
@@ -78,14 +86,29 @@ struct StockCard: View {
     @ViewBuilder private var traits: some View {
         if let t = stock.traits {
             VStack(alignment: .leading, spacing: 3) {
-                TraitRow(title: L("Contrast", zh: "反差"), trait: t.contrast)
+                TraitRow(title: L("Contrast", zh: "反差"), trait: t.contrast,
+                         detail: detail(t.contrast,
+                                        L("Contrast %.2f: print density per tenfold exposure, within ±1 stop of mid-grey.",
+                                          zh: "反差 %.2f：中灰上下 1 档内，曝光每变 10 倍的打印密度变化。")))
                 // A silver stock has no saturation to speak of.
                 if !stock.isMonochrome {
-                    TraitRow(title: L("Saturation", zh: "饱和度"), trait: t.saturation)
+                    TraitRow(title: L("Saturation", zh: "饱和度"), trait: t.saturation,
+                             detail: detail(t.saturation,
+                                            L("Saturation %.2f×: the chroma (C*ab) of four colour patches on the print, over the chroma they went in with.",
+                                              zh: "饱和度 %.2f 倍：四个色块印出后的彩度（C*ab）与输入彩度之比。")))
                 }
                 if stock.isFilm {
-                    TraitRow(title: L("Latitude", zh: "宽容度"), trait: t.latitude)
-                    TraitRow(title: L("Grain", zh: "颗粒"), trait: t.grain)
+                    // The film's own curve, before any paper; and colour dies
+                    // in the toe long before tone does (AGENTS.md trap 31).
+                    TraitRow(title: L("Latitude", zh: "宽容度"), trait: t.latitude,
+                             detail: detail(t.latitude,
+                                            L("Latitude %.1f stops: the exposure range over which the film's own curve keeps at least half its mid-grey contrast. Colour fades in the shadows sooner than tone does.",
+                                              zh: "宽容度 %.1f 档：胶片自身曲线保持中灰处一半以上反差的曝光范围。暗部的色彩比影调消失得更早。"),
+                                            filmAlone: true))
+                    TraitRow(title: L("Grain", zh: "颗粒"), trait: t.grain,
+                             detail: detail(t.grain,
+                                            L("Grain %.1f: RMS print density over a flat mid-grey, ×1000.",
+                                              zh: "颗粒 %.1f：中灰平场的打印密度均方根，×1000。")))
                     // Scheme A (PRD Q3): the dots are what the engine renders,
                     // and for colour negatives that is one model today.
                     if stock.isColourNegative {
@@ -95,8 +118,36 @@ struct StockCard: View {
                             .foregroundStyle(Theme.Ink.tertiary)
                     }
                 }
+                Text(measuredLine)
+                    .font(Theme.Font.meta)
+                    .foregroundStyle(Theme.Ink.tertiary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
         }
+    }
+
+    /// A dot row's tooltip: the number, what it is, and what it was measured
+    /// with (PRD §3.5).
+    private func detail(_ trait: StockTrait?, _ format: String, filmAlone: Bool = false) -> String {
+        guard let trait else { return "" }
+        let source = filmAlone
+            ? L("Measured in this app on the film alone, before any paper.", zh: "本软件实测，只测胶片本身，不经相纸。")
+            : measuredLine
+        return String(format: format, trait.value) + "\n" + source
+    }
+
+    /// The pairing the numbers belong to: a film on its default paper, a paper
+    /// under a reference film. Printed on another paper, a film looks different.
+    private var measuredLine: String {
+        let with = stock.traits?.measuredWith
+        if with == "scan" {
+            return L("Measured in this app, scanned directly.", zh: "本软件实测，直接扫描。")
+        }
+        let name = with.flatMap { catalog.stock($0)?.name } ?? with ?? ""
+        return stock.isFilm
+            ? String(format: L("Measured in this app on %@; another paper renders differently.",
+                               zh: "本软件实测，搭配 %@；换相纸效果会不同。"), name)
+            : String(format: L("Measured in this app, under %@.", zh: "本软件实测，用 %@ 测量。"), name)
     }
 
     /// The lines that are facts about the catalogue rather than about the look.
@@ -139,6 +190,8 @@ struct StockCard: View {
 private struct TraitRow: View {
     let title: String
     let trait: StockTrait?
+    /// The number behind the dots and how it was measured.
+    let detail: String
 
     var body: some View {
         if let level = trait?.level {
@@ -156,7 +209,7 @@ private struct TraitRow: View {
                 }
             }
             // The dots are relative; the number is what was measured (PRD Q12).
-            .help(String(format: "%.3g", trait?.value ?? 0))
+            .help(detail)
             .accessibilityElement(children: .ignore)
             .accessibilityLabel("\(title) \(level)/5")
         }

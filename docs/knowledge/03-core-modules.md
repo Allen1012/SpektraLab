@@ -93,7 +93,7 @@ Layer 2 调整项（`Model/Adjustments.swift`）：enabled、temperature、tint�
 
 | 区域 | 分区（按顺序） | 在哪算 |
 |---|---|---|
-| 左栏 Film and Print | Navigator · Half-Frame Pair（仅半格对）· Settings Clipboard · Film · Film Edge · Date Back · Print · Crop（半格对时没有）· Enlarger | 引擎；Crop 是几何（见下表），但有片边时裁切进入底片 |
+| 左栏 Film and Print | Navigator · Half-Frame Pair（仅半格对）· Settings Clipboard · Styles（风格，仅 Debug）· Film · Film Edge · Date Back · Print · Crop（半格对时没有）· Enlarger | 引擎；Crop 是几何（见下表），但有片边时裁切进入底片 |
 | 右栏 Parameters ▸ Pre-Dev | Latitude · Input / Camera · Film Format · Scene Placement ·（Tone Mask，开关关闭） | 引擎；其中 Camera 的白平衡和镜头校正属于**解码** |
 | 右栏 Parameters ▸ Post-Dev | White Balance · Exposure · Curve · Color Balance ·（Masks，开关关闭） | Layer 2，一次绘制 |
 | 画布右上角 | 直方图 · 档位标记 | 只读 |
@@ -122,15 +122,33 @@ Layer 2 调整项（`Model/Adjustments.swift`）：enabled、temperature、tint�
 - 勾选状态存在 `ui2.clipboard.groups`。菜单 Copy Settings ⇧⌘C、Paste Settings ⇧⌘V、Sync Settings。
 - 裁切、Post-Dev、镜头校正、片边、数据背始终跟随各自照片，不随同步走；As Shot 白平衡和拟合出的 Scene Placement 按目标照片各自解算；同步没有批量撤销（`README.md`）。
 
+### 5.1 风格（PRD/PRD-胶片指南卡片与风格.md §5）
+
+风格是"保存下来的粘贴"：点一下就写到 `pasteTargets`，走粘贴的两条写入路径（`Session.writeSettingsLive` 写画布上那张，可撤销；`Session.writeSettingsOffline` 写其他选中照片的 sidecar 并标记待冲洗）。
+
+- **内置风格**（`Model/Style.swift` 的 `BuiltInStyle.all`，11 个）只写胶片、相纸、扫描与数字中间片的选择、三个效果开关和完整的 `EffectStrengths`，不碰画幅。选胶片走 `FilmParams.choosingFilm(_:in:)`：这是胶片列表的规则（自动配相纸、黑白配黑白相纸、反转片直接扫描）抽成的纯函数，`Session.selectFilmStock` 也调用它，所以离线照片和画布照片结果一致。
+- **我的风格**（`UserStyle`）存成 `SettingsClip` 的形态：勾选的分组，加这些分组的字段写在一份空白 sidecar 上，应用时就是一次粘贴。
+- **存储**：`Model/StyleStore.swift`，`~/Library/Application Support/SpektraLab/styles.json`，原子写入；读不出的文件先改名为 `styles.unreadable-<时间戳>.json` 再保存，不覆盖。名称去掉首尾空格后不能与内置风格的中英文名或已有风格重名（不分大小写）。
+- **测试**：`StyleTests` 用临时路径的 `StyleStore`，不碰用户文件。
+
+### 5.2 胶片指南卡片与场景筛选（同一 PRD，§3–§4）
+
+- 数据全部来自 `StockCatalog.json`，由 `Tools/gen-catalog.py` 合并三处来源：文案与场景标签 `modern_UI/stock_guide.json`（人工）、指标 `modern_UI/stock_traits.json`（`engine/tests/stock_traits.py` 测量生成）、示意图 `modern_UI/stock_art/<id>.svg`（尚未绘制，缺图时画按类型配色的占位图）。
+- 指标 5 档在同类（胶片或相纸）实测范围内线性划分，不用分位数：彩色负片颗粒几乎相同，分位数会造出不存在的差别。宽容度只测胶片本身的特性曲线，不经相纸；饱和度用与中灰同亮度的 12 色环，在不裁色域的线性 ProPhoto RGB 下测；相纸统一用 Portra 400（黑白用 Tri-X 400）作参考胶片。方法和改动原因见 `engine/tests/stock_traits.py` 的文件说明。
+- 卡片（`Panels/StockCard.swift`）只接收一款胶片和目录，不持有 `Session`，所以不会写参数或触发渲染。悬停 0.5 秒弹出；灰显的相纸行也能弹卡片，所以 `StockRow` 不用 `rowEnabled`，而是保留鼠标、在点击时拒绝。
+- 场景筛选只影响显示，状态不保存；当前胶片不属于所选场景时保留并变暗。规则在 `StockCatalog.filmGroups(scene:keeping:)`。
+
 ## 6. 功能开关（`Model/FeatureFlags.swift`）
 
-除 `scratchPool` 外都是编译期 `static let`，Debug 和 Release 相同。
+都是编译期常量。除 `scratchPool`、`filmGuide`、`styles` 外，Debug 和 Release 相同；`filmGuide` 和 `styles` 只在 Debug 打开。
 
 | 开关 | 值 | 控制什么 | 何时改 |
 |---|---|---|---|
 | `masks` | false | 局部蒙版：`Session.syncMasks` 不再把蒙版打包给内核（已有蒙版的 sidecar 照常读写但不生效）、右栏不显示、没有 Mask 菜单 | 等用户自己的蒙版产品需求文档（PRD）落地 |
 | `toneMask` | false | RFC-024 反差蒙版（界面叫 Tone Mask）：分区不显示，线上永远发 `contrast_mask_active = false` | 2026-09-29 用户决定先撤下 |
 | `enlarger` | false | 注释说是控制左栏 Enlarger 分区 | **代码里没有任何地方引用这个开关**；`LeftPanel` 无条件加入 Enlarger 分区（第 38 行）。开关当前不起作用，原因未核实 |
+| `filmGuide` | Debug 为 true | 胶片与相纸的悬停卡片、胶片列表的场景筛选、两个"关于当前胶片 / 相纸"菜单项 | 设计稿确认后进 Release（PRD §9） |
+| `styles` | Debug 为 true | 左栏风格分区 | 同上 |
 | `blackAndWhite` | true | 黑白胶片和相纸是否出现在目录里 | 1.3.3 起所有构建都打开；等镜头滤镜和相纸号数的控件设计好后删除开关 |
 | `framePipeline` | true | 串行解码管线是否接管加载路径 | 真实使用一周无问题后删除 |
 | `scratchPool` | Release 恒为 false；Debug 下看环境变量 `SPEKTRAFILM_SCRATCH_POOL=1` | 草稿缓冲池（具体用途未核实） | — |

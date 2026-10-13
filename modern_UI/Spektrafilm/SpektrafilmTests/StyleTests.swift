@@ -3,6 +3,8 @@
 //  Sidecar in, Sidecar out, as `SettingsClipboardTests` is. The store is only
 //  ever given a temporary URL: a test on the real path would rewrite the
 //  person's own styles (AGENTS.md trap 24's rule, for a file).
+import ImageIO
+import UniformTypeIdentifiers
 import XCTest
 
 @MainActor
@@ -76,6 +78,134 @@ final class StyleTests: XCTestCase {
                 }
             }
         }
+    }
+
+    /// A10, second half: a built-in style is the same as choosing its film
+    /// and its paper in the two lists and setting the effects by hand, from
+    /// every state a frame can start in.
+    func testABuiltInStyleIsChoosingItByHand() {
+        let session = Session(styleStore: StyleStore(url: storeURL))
+        let printing = FilmParams.default
+        var scanning = FilmParams.default; scanning.scanFilm = true
+        var intermediate = FilmParams.default; intermediate.digitalIntermediate = true
+        var silver = FilmParams.default
+        silver.filmStock = "kodak_tri_x_400"; silver.printStock = "ilford_multigrade_iv_rc"
+        for start in [printing, scanning, intermediate, silver] {
+            for style in BuiltInStyle.all {
+                session.params = start
+                session.selectFilmStock(style.film)
+                if !(catalog.stock(style.film)?.isPositive ?? false) {
+                    // Clicking the paper row: the style's, or the one the
+                    // film list just chose.
+                    session.selectPrintStock(style.paper ?? session.params.printStock)
+                }
+                var byHand = session.params
+                byHand.grainActive = style.grainActive
+                byHand.halationActive = style.halationActive
+                byHand.glareActive = style.glareActive
+                byHand.effects = style.effects
+                var target = Sidecar(); target.params = start
+                // Both through `resolved`: the session fills the film edge's
+                // text and framing in for the frame it holds, whoever chose
+                // the film, and resolving twice is resolving once.
+                XCTAssertEqual(session.resolved(style.applied(to: target, catalog: catalog).params),
+                               session.resolved(byHand),
+                               "\(style.id) from \(start.filmStock)/\(start.printStock)")
+            }
+        }
+    }
+
+    /// A5 and A10's last clause: a style applied to three picked frames writes
+    /// the two that are not on the canvas to disk, marks them for a new
+    /// develop, and gives them what the canvas frame got.
+    ///
+    /// The frames are written here rather than copied from the camera
+    /// fixtures, which this checkout may not have (AGENTS.md trap 26): what is
+    /// tested is where settings go, not what a photograph looks like.
+    func testAStyleOnThreePickedFramesWritesAllThree() async throws {
+        let urls = try (0..<3).map { i -> URL in
+            let sub = dir.appending(path: "frame-\(i)")
+            try FileManager.default.createDirectory(at: sub, withIntermediateDirectories: true)
+            let url = sub.appending(path: "frame.tif")
+            try writeGrey(to: url)
+            return url
+        }
+        addTeardownBlock { for url in urls { try? FileManager.default.removeItem(at: Sidecar.url(for: url)) } }
+        let (a, b, c) = (urls[0], urls[1], urls[2])
+        let s = Session(styleStore: StyleStore(url: storeURL))
+        s.open(urls: urls)
+        try await waitUntil("the engine to warm up") { s.serviceReady }
+        s.click(a)
+        try await waitUntil("a to decode") { s.selection == a && s.decoded != nil }
+        // A frame with no sidecar stops at the decode until it is asked to
+        // print, as `SettingsClipboardSessionTests` asks it.
+        s.requestPrint()
+        try await settle(s)
+        s.click(b, command: true)
+        s.click(c, command: true)
+        XCTAssertEqual(Set(s.styleTargets), Set(urls))
+        let style = try XCTUnwrap(BuiltInStyle.all.first { $0.id == "classic_bw" })
+        XCTAssertNil(s.styleBlockedReason)
+        s.applyStyle(.builtIn(style))
+        XCTAssertEqual(s.params.filmStock, style.film, "the canvas frame")
+        for url in [b, c] {
+            let saved = try XCTUnwrap(Sidecar.load(for: url), "\(url.path) has no sidecar")
+            XCTAssertEqual(saved.state, .stale, url.path)
+            XCTAssertEqual(s.frameStates[url], .stale, url.path)
+            // The fields a built-in style owns, as the canvas frame has them.
+            XCTAssertEqual(saved.params.filmStock, s.params.filmStock)
+            XCTAssertEqual(saved.params.printStock, s.params.printStock)
+            XCTAssertEqual(saved.params.scanFilm, s.params.scanFilm)
+            XCTAssertEqual(saved.params.digitalIntermediate, s.params.digitalIntermediate)
+            XCTAssertEqual(saved.params.grainActive, s.params.grainActive)
+            XCTAssertEqual(saved.params.halationActive, s.params.halationActive)
+            XCTAssertEqual(saved.params.glareActive, s.params.glareActive)
+            XCTAssertEqual(saved.params.effects, s.params.effects)
+        }
+        // Nothing left in flight when the session goes away.
+        try await settle(s)
+    }
+
+    /// `SettingsClipboardSessionTests.settle`: the develop, then the render
+    /// its trailing request starts.
+    private func settle(_ s: Session) async throws {
+        try await waitUntil("the develop", timeout: 90, state: {
+            "status=\(s.status) busy=\(s.busy) pending=\(s.scheduler.pending) "
+            + "session=\(String(describing: s.serviceSessionIDForExport)) ready=\(s.serviceReady) "
+            + "decoded=\(s.decoded != nil) state=\(String(describing: s.frameStates[s.selection ?? URL(fileURLWithPath: "/")]))"
+        }) {
+            s.serviceSessionIDForExport != nil && !s.busy && !s.scheduler.pending
+        }
+        try await Task.sleep(for: .milliseconds(800))
+        try await waitUntil("the queue to drain", timeout: 30) { !s.busy && !s.scheduler.pending }
+    }
+
+    /// A small 16-bit grey TIFF, enough for the app to open and develop.
+    private func writeGrey(to url: URL) throws {
+        let (w, h) = (96, 64)
+        var pixels = [UInt16](repeating: 0x5000, count: w * h * 4)
+        for i in stride(from: 3, to: pixels.count, by: 4) { pixels[i] = 0xFFFF }
+        let space = try XCTUnwrap(CGColorSpace(name: CGColorSpace.sRGB))
+        let info = CGBitmapInfo(rawValue: CGImageAlphaInfo.noneSkipLast.rawValue
+                                | CGBitmapInfo.byteOrder16Little.rawValue)
+        let image = try pixels.withUnsafeMutableBytes { raw -> CGImage in
+            let ctx = try XCTUnwrap(CGContext(data: raw.baseAddress, width: w, height: h, bitsPerComponent: 16,
+                                              bytesPerRow: w * 8, space: space, bitmapInfo: info.rawValue))
+            return try XCTUnwrap(ctx.makeImage())
+        }
+        let dest = try XCTUnwrap(CGImageDestinationCreateWithURL(url as CFURL, UTType.tiff.identifier as CFString, 1, nil))
+        CGImageDestinationAddImage(dest, image, nil)
+        XCTAssertTrue(CGImageDestinationFinalize(dest))
+    }
+
+    private func waitUntil(_ what: String, timeout: Double = 30, state: () -> String = { "" },
+                           _ condition: @MainActor () -> Bool) async throws {
+        let deadline = Date().addingTimeInterval(timeout)
+        while Date() < deadline {
+            if condition() { return }
+            try await Task.sleep(for: .milliseconds(50))
+        }
+        XCTFail("timed out waiting for \(what) \(state())")
     }
 
     // MARK: - saved

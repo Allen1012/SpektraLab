@@ -298,11 +298,25 @@ struct StockRow: View {
             }
         }
         .contentShape(Rectangle())
-        .onTapGesture(perform: action)
-        .rowEnabled(row.enabled, because: row.disabledReason)
-        .opacity(row.dimmed ? Theme.disabledOpacity : 1)
-        .help(row.help)
+        // Not `rowEnabled`, deliberately: it also stops hit testing, and a
+        // greyed paper still has a card to show on hover (PRD §3.4) — the
+        // card is where the reason it is greyed is easiest to read. The row
+        // looks and refuses exactly as `rowEnabled` would; it only keeps the
+        // pointer.
+        .onTapGesture { if row.enabled { action() } }
+        .opacity(row.enabled && !row.dimmed ? 1 : Theme.disabledOpacity)
+        .modifier(RowHelp(text: row.enabled ? row.help : row.disabledReason))
+        .accessibilityAddTraits(row.enabled ? .isButton : [])
         .modifier(StockCardHover(card: card))
+    }
+
+    /// `.help("")` still installs an empty tooltip, so it is attached only
+    /// when there is something to say (as `rowEnabled`'s reason is).
+    private struct RowHelp: ViewModifier {
+        let text: String
+        func body(content: Content) -> some View {
+            if text.isEmpty { content } else { content.help(text) }
+        }
     }
 
     /// The selection capsule: the drawing's 15.27 in an 18 pt row, and the

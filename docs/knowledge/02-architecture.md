@@ -88,6 +88,7 @@ flowchart TB
 | 半格双拼 | `…/Sidecars/Pairs/*.spektrapair` | JSON；它的观感是该 URL 对应的普通 sidecar | `Model/HalfFramePair.swift` 第 252 行 |
 | 文件夹内排序 | `…/Sidecars/Order/<文件夹名>-<路径 SHA256 前 16 位>.order.json` | JSON | `Model/FrameOrder.swift` |
 | 导出配方 | `~/Library/Application Support/SpektraLab/export-recipes.json` | JSON | `Export/ExportRecipe.swift` 第 709–736 行 |
+| 我的风格 | `~/Library/Application Support/SpektraLab/styles.json` | JSON，带版本号；读不出时改名留存，不覆盖 | `Model/StyleStore.swift` |
 | 磁盘缓存 | `~/Library/Caches/com.hanze.spektralab/store/` | 数据文件 `<摘要前 2 位>/<摘要>.bin` + `index.sqlite` | `Model/Session.swift` 第 993–995 行、`Diagnostics/DiskCacheStore.swift` |
 | 会话日志 | `~/Library/Logs/SpektraLab/`（可在设置里改，键 `diag.logDirectory`） | 每次启动一个按行 JSON 文件，`latest.jsonl` 是指向当前文件的符号链接 | `Diagnostics/Diagnostics.swift` 第 394–398 行、`Diagnostics/LogFile.swift` |
 | 导出作业日志 | 导出文件旁的 `.joblog.jsonl` | 按行 JSON；**默认关闭**（`diag.writeExportJobLog`） | `Diagnostics/JobLog.swift` |

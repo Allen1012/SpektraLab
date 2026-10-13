@@ -274,7 +274,7 @@ costs.
 
 | region | sections | runs in |
 |---|---|---|
-| **Film and Print** (left) | Navigator · Half-Frame Pair (on a pair) · Settings Clipboard · Film · Film Edge · Date Back · Print · Crop · Enlarger | the engine; Crop is geometry (below) — except under a film edge, where it is the negative (§7.11) |
+| **Film and Print** (left) | Navigator · Half-Frame Pair (on a pair) · Settings Clipboard · Styles (Debug only, `FeatureFlags.styles`) · Film · Film Edge · Date Back · Print · Crop · Enlarger | the engine; Crop is geometry (below) — except under a film edge, where it is the negative (§7.11) |
 | **Parameters ▸ Pre-Dev** (right) | Latitude · Input / Camera · Film Format · Scene Placement | the engine, except Camera's white balance and lens correction, which are the **decode**. On a pair these are the picked frame's (§7.12) |
 | **Parameters ▸ Post-Dev** (right) | White Balance · Exposure · Curve · Color Balance | **Layer 2**, one draw |
 | canvas, top right | histogram · tier badges | reads, never writes |
@@ -518,6 +518,16 @@ inside a field. `TypingKeyGuard` is a local key monitor that sends typing keys
 - **Select all and Sync** (⌘A, Settings Clipboard ▸ Sync to N) write the ticked
   groups from the current frame to the picked set through the clipboard's own
   rules; there is no batch undo.
+- **Styles** (PRD/PRD-胶片指南卡片与风格.md §5) are a paste the app or the person
+  keeps: one click writes a style onto `pasteTargets` through the paste's two
+  write paths (`Session.writeSettingsLive` / `writeSettingsOffline`). A built-in
+  style chooses its film through `FilmParams.choosingFilm(_:in:)` — the film
+  list's rule as a value, so an offline sidecar and the canvas frame get the
+  same pairing. Saved styles live in
+  `~/Library/Application Support/SpektraLab/styles.json` (`StyleStore`).
+- **Stock cards and the scene filter** (same PRD, §3–4; `FeatureFlags.filmGuide`,
+  Debug only) read nothing but `StockCatalog.json`: a card holds no `Session`,
+  so it cannot write or render.
 
 ---
 

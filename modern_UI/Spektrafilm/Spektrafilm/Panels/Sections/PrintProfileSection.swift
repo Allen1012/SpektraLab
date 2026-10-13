@@ -210,14 +210,28 @@ struct PrintProfileSection: View {
     /// papers, which are not stocks (PRD §3.4).
     private func card(for id: String) -> AnyView? {
         guard let stock = session.catalog.stock(id), stock.isPaper else { return nil }
-        return AnyView(StockCard(stock: stock, catalog: session.catalog, fastFlipLine: helpFor(id)))
+        return AnyView(StockCard(stock: stock, catalog: session.catalog, fastFlipLine: helpFor(id),
+                                 note: note(for: stock)))
+    }
+
+    /// Why this paper takes no part in the picture right now, said on its card.
+    private func note(for paper: Stock) -> String? {
+        if filmIsPositive {
+            return L("The film in use is a slide film: it is scanned, not printed.",
+                     zh: "当前胶片为反转片，不经相纸。")
+        }
+        guard !session.catalog.canPrint(film: session.params.filmStock, on: paper.id) else { return nil }
+        return paper.isMonochrome ? Self.silverPaperReason : Self.colourPaperReason
     }
 
     private var menu: some View {
         Group {
             if FeatureFlags.filmGuide {
                 Button(L("About This Paper", zh: "关于当前相纸")) { aboutShown = true }
-                    .disabled(session.params.scanFilm || filmIsPositive || session.params.digitalIntermediate)
+                    // A slide film keeps its paper underneath (PRD §3.4), so
+                    // there is still a paper to describe; a negative being
+                    // scanned or sent to the DI has none in use.
+                    .disabled(!filmIsPositive && (session.params.scanFilm || session.params.digitalIntermediate))
                 Divider()
             }
             Button(L(.helpUseFilmPaper)) {

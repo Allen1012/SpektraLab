@@ -24,7 +24,26 @@
    "tags": [
     "everyday",
     "vintage"
-   ]
+   ],
+   "traits": {
+    "contrast": {
+     "value": 1.65875081597716,
+     "level": 4
+    },
+    "saturation": {
+     "value": 1.650519448466555,
+     "level": 4
+    },
+    "latitude": {
+     "value": 11.23691445716982,
+     "level": 3
+    },
+    "grain": {
+     "value": 42.242456321124415,
+     "level": 3
+    },
+    "measuredWith": "fujifilm_crystal_archive_typeii"
+   }
   },
   {
    "id": "fujifilm_crystal_archive_typeii",
@@ -42,6 +61,17 @@
     "status": "approved",
     "en": "Fujifilm's colour paper, the default for Fujifilm negatives.",
     "zh": "富士彩色相纸，富士负片的默认搭配。"
+   },
+   "traits": {
+    "contrast": {
+     "value": 1.3908665885446012,
+     "level": 2
+    },
+    "saturation": {
+     "value": 1.3400709255412449,
+     "level": 2
+    },
+    "measuredWith": "kodak_portra_400"
    }
   },
   {
@@ -70,7 +100,22 @@
    "tags": [
     "landscape",
     "bw"
-   ]
+   ],
+   "traits": {
+    "contrast": {
+     "value": 1.2182317938028988,
+     "level": 1
+    },
+    "latitude": {
+     "value": 13.76362005244167,
+     "level": 4
+    },
+    "grain": {
+     "value": 33.71581958089536,
+     "level": 2
+    },
+    "measuredWith": "ilford_multigrade_iv_rc"
+   }
   },
   {
    "id": "fujifilm_pro_400h",
@@ -96,7 +141,26 @@
    },
    "tags": [
     "portrait"
-   ]
+   ],
+   "traits": {
+    "contrast": {
+     "value": 1.425721482515322,
+     "level": 3
+    },
+    "saturation": {
+     "value": 1.3668974121377007,
+     "level": 3
+    },
+    "latitude": {
+     "value": 10.771055571100124,
+     "level": 3
+    },
+    "grain": {
+     "value": 31.148346091330758,
+     "level": 2
+    },
+    "measuredWith": "fujifilm_crystal_archive_typeii"
+   }
   },
   {
    "id": "fujifilm_provia_100f",
@@ -122,7 +186,26 @@
    },
    "tags": [
     "landscape"
-   ]
+   ],
+   "traits": {
+    "contrast": {
+     "value": 1.2925368660330596,
+     "level": 2
+    },
+    "saturation": {
+     "value": 1.0052264864382403,
+     "level": 1
+    },
+    "latitude": {
+     "value": 6.3354926490747765,
+     "level": 1
+    },
+    "grain": {
+     "value": 15.09850172954138,
+     "level": 1
+    },
+    "measuredWith": "scan"
+   }
   },
   {
    "id": "fujifilm_velvia_100",
@@ -148,7 +231,26 @@
    },
    "tags": [
     "landscape"
-   ]
+   ],
+   "traits": {
+    "contrast": {
+     "value": 1.4308774656387946,
+     "level": 3
+    },
+    "saturation": {
+     "value": 1.3312094166966562,
+     "level": 3
+    },
+    "latitude": {
+     "value": 5.649616867299298,
+     "level": 1
+    },
+    "grain": {
+     "value": 15.545218913644845,
+     "level": 1
+    },
+    "measuredWith": "scan"
+   }
   },
   {
    "id": "fujifilm_xtra_400",
@@ -175,7 +277,26 @@
    "tags": [
     "everyday",
     "vintage"
-   ]
+   ],
+   "traits": {
+    "contrast": {
+     "value": 1.7610138847538708,
+     "level": 5
+    },
+    "saturation": {
+     "value": 1.785982574405607,
+     "level": 4
+    },
+    "latitude": {
+     "value": 11.657773432720251,
+     "level": 3
+    },
+    "grain": {
+     "value": 47.7447545766367,
+     "level": 3
+    },
+    "measuredWith": "fujifilm_crystal_archive_typeii"
+   }
   },
   {
    "id": "ilford_hp5_plus_400",
@@ -204,7 +325,22 @@
     "everyday",
     "lowLight",
     "bw"
-   ]
+   ],
+   "traits": {
+    "contrast": {
+     "value": 1.3386002106695836,
+     "level": 2
+    },
+    "latitude": {
+     "value": 14.295500800053054,
+     "level": 5
+    },
+    "grain": {
+     "value": 76.93592206405849,
+     "level": 5
+    },
+    "measuredWith": "ilford_multigrade_iv_rc"
+   }
   },
   {
    "id": "ilford_multigrade_iv_rc",
@@ -223,6 +359,13 @@
     "status": "approved",
     "en": "A variable-contrast resin-coated black-and-white paper; every black-and-white film in this app prints on it.",
     "zh": "可变反差的树脂涂层黑白相纸，本应用的黑白胶片都印在它上面。"
+   },
+   "traits": {
+    "contrast": {
+     "value": 1.1955880047655334,
+     "level": 1
+    },
+    "measuredWith": "kodak_tri_x_400"
    }
   },
   {
@@ -241,6 +384,17 @@
     "status": "approved",
     "en": "The standard cinema release print film, the other half of the cinematic pairing.",
     "zh": "影院放映拷贝的标准片种，“电影感”组合的另一半。"
+   },
+   "traits": {
+    "contrast": {
+     "value": 1.359429978965495,
+     "level": 2
+    },
+    "saturation": {
+     "value": 1.2817627981676367,
+     "level": 1
+    },
+    "measuredWith": "kodak_portra_400"
    }
   },
   {
@@ -259,6 +413,17 @@
     "status": "approved",
     "en": "A premium release print film with higher contrast and saturation.",
     "zh": "高端放映拷贝片，反差和饱和度更高。"
+   },
+   "traits": {
+    "contrast": {
+     "value": 1.4539723269199876,
+     "level": 3
+    },
+    "saturation": {
+     "value": 1.321876338682525,
+     "level": 1
+    },
+    "measuredWith": "kodak_portra_400"
    }
   },
   {
@@ -287,7 +452,26 @@
    },
    "tags": [
     "landscape"
-   ]
+   ],
+   "traits": {
+    "contrast": {
+     "value": 1.2000341930548648,
+     "level": 1
+    },
+    "saturation": {
+     "value": 0.9779296365583686,
+     "level": 1
+    },
+    "latitude": {
+     "value": 6.771585311944432,
+     "level": 1
+    },
+    "grain": {
+     "value": 16.748872223741795,
+     "level": 1
+    },
+    "measuredWith": "scan"
+   }
   },
   {
    "id": "kodak_ektacolor_edge",
@@ -305,6 +489,17 @@
     "status": "approved",
     "en": "Kodak's colour paper.",
     "zh": "柯达彩色相纸。"
+   },
+   "traits": {
+    "contrast": {
+     "value": 1.5085111765648622,
+     "level": 3
+    },
+    "saturation": {
+     "value": 1.4676604125054487,
+     "level": 3
+    },
+    "measuredWith": "kodak_portra_400"
    }
   },
   {
@@ -331,7 +526,26 @@
    },
    "tags": [
     "landscape"
-   ]
+   ],
+   "traits": {
+    "contrast": {
+     "value": 1.3930747314871927,
+     "level": 3
+    },
+    "saturation": {
+     "value": 1.4480238974751327,
+     "level": 3
+    },
+    "latitude": {
+     "value": 11.15227130033622,
+     "level": 3
+    },
+    "grain": {
+     "value": 31.676774481110634,
+     "level": 2
+    },
+    "measuredWith": "kodak_portra_endura"
+   }
   },
   {
    "id": "kodak_endura_premier",
@@ -349,6 +563,17 @@
     "status": "approved",
     "en": "Kodak's professional colour paper.",
     "zh": "柯达专业彩色相纸。"
+   },
+   "traits": {
+    "contrast": {
+     "value": 1.7677658845687017,
+     "level": 5
+    },
+    "saturation": {
+     "value": 1.6697445801077446,
+     "level": 5
+    },
+    "measuredWith": "kodak_portra_400"
    }
   },
   {
@@ -376,7 +601,26 @@
    "tags": [
     "everyday",
     "vintage"
-   ]
+   ],
+   "traits": {
+    "contrast": {
+     "value": 1.3358266062399853,
+     "level": 2
+    },
+    "saturation": {
+     "value": 1.30300267516993,
+     "level": 2
+    },
+    "latitude": {
+     "value": 9.660876129146683,
+     "level": 3
+    },
+    "grain": {
+     "value": 28.803789774189273,
+     "level": 2
+    },
+    "measuredWith": "kodak_portra_endura"
+   }
   },
   {
    "id": "kodak_kodachrome_64",
@@ -403,7 +647,26 @@
    "tags": [
     "landscape",
     "vintage"
-   ]
+   ],
+   "traits": {
+    "contrast": {
+     "value": 1.1434647821640718,
+     "level": 1
+    },
+    "saturation": {
+     "value": 0.944028756335333,
+     "level": 1
+    },
+    "latitude": {
+     "value": 6.398114985870978,
+     "level": 1
+    },
+    "grain": {
+     "value": 15.070689775922299,
+     "level": 1
+    },
+    "measuredWith": "scan"
+   }
   },
   {
    "id": "kodak_portra_160",
@@ -429,7 +692,26 @@
    },
    "tags": [
     "portrait"
-   ]
+   ],
+   "traits": {
+    "contrast": {
+     "value": 1.2968830622686167,
+     "level": 2
+    },
+    "saturation": {
+     "value": 1.2185124475150106,
+     "level": 2
+    },
+    "latitude": {
+     "value": 11.313316205302005,
+     "level": 3
+    },
+    "grain": {
+     "value": 29.032129731782554,
+     "level": 2
+    },
+    "measuredWith": "kodak_portra_endura"
+   }
   },
   {
    "id": "kodak_portra_400",
@@ -456,7 +738,26 @@
    "tags": [
     "portrait",
     "everyday"
-   ]
+   ],
+   "traits": {
+    "contrast": {
+     "value": 1.2993175872150722,
+     "level": 2
+    },
+    "saturation": {
+     "value": 1.278506654085134,
+     "level": 2
+    },
+    "latitude": {
+     "value": 11.64112640283016,
+     "level": 3
+    },
+    "grain": {
+     "value": 30.94863865829674,
+     "level": 2
+    },
+    "measuredWith": "kodak_portra_endura"
+   }
   },
   {
    "id": "kodak_portra_800",
@@ -483,7 +784,26 @@
    "tags": [
     "portrait",
     "lowLight"
-   ]
+   ],
+   "traits": {
+    "contrast": {
+     "value": 1.2606645140078054,
+     "level": 2
+    },
+    "saturation": {
+     "value": 1.254715514894349,
+     "level": 2
+    },
+    "latitude": {
+     "value": 11.195862881948127,
+     "level": 3
+    },
+    "grain": {
+     "value": 31.02773469285853,
+     "level": 2
+    },
+    "measuredWith": "kodak_portra_endura"
+   }
   },
   {
    "id": "kodak_portra_800_push1",
@@ -510,7 +830,26 @@
    },
    "tags": [
     "lowLight"
-   ]
+   ],
+   "traits": {
+    "contrast": {
+     "value": 1.5601166240978648,
+     "level": 4
+    },
+    "saturation": {
+     "value": 1.6650696265222498,
+     "level": 4
+    },
+    "latitude": {
+     "value": 11.098890755767957,
+     "level": 3
+    },
+    "grain": {
+     "value": 37.927686241055106,
+     "level": 2
+    },
+    "measuredWith": "kodak_portra_endura"
+   }
   },
   {
    "id": "kodak_portra_800_push2",
@@ -537,7 +876,26 @@
    },
    "tags": [
     "lowLight"
-   ]
+   ],
+   "traits": {
+    "contrast": {
+     "value": 1.7659996107764213,
+     "level": 5
+    },
+    "saturation": {
+     "value": 1.9388709547029725,
+     "level": 5
+    },
+    "latitude": {
+     "value": 9.83375980109324,
+     "level": 3
+    },
+    "grain": {
+     "value": 45.63373420053537,
+     "level": 3
+    },
+    "measuredWith": "kodak_portra_endura"
+   }
   },
   {
    "id": "kodak_portra_endura",
@@ -555,6 +913,17 @@
     "status": "approved",
     "en": "A professional paper aimed at portraits, with softer contrast.",
     "zh": "面向人像的专业相纸，反差较柔。"
+   },
+   "traits": {
+    "contrast": {
+     "value": 1.2993175872150722,
+     "level": 2
+    },
+    "saturation": {
+     "value": 1.278506654085134,
+     "level": 1
+    },
+    "measuredWith": "kodak_portra_400"
    }
   },
   {
@@ -573,6 +942,17 @@
     "status": "approved",
     "en": "A professional paper with medium contrast; this app's default paper.",
     "zh": "专业相纸，反差居中；本应用的默认相纸。"
+   },
+   "traits": {
+    "contrast": {
+     "value": 1.4169247660435351,
+     "level": 3
+    },
+    "saturation": {
+     "value": 1.355044191227452,
+     "level": 2
+    },
+    "measuredWith": "kodak_portra_400"
    }
   },
   {
@@ -601,7 +981,22 @@
    "tags": [
     "landscape",
     "bw"
-   ]
+   ],
+   "traits": {
+    "contrast": {
+     "value": 1.2075774178321348,
+     "level": 1
+    },
+    "latitude": {
+     "value": 15.247677821682649,
+     "level": 5
+    },
+    "grain": {
+     "value": 37.26812888698443,
+     "level": 2
+    },
+    "measuredWith": "ilford_multigrade_iv_rc"
+   }
   },
   {
    "id": "kodak_tri_x_400",
@@ -629,7 +1024,22 @@
    "tags": [
     "everyday",
     "bw"
-   ]
+   ],
+   "traits": {
+    "contrast": {
+     "value": 1.1955880047655334,
+     "level": 1
+    },
+    "latitude": {
+     "value": 15.281339058155458,
+     "level": 5
+    },
+    "grain": {
+     "value": 78.57986397877337,
+     "level": 5
+    },
+    "measuredWith": "ilford_multigrade_iv_rc"
+   }
   },
   {
    "id": "kodak_ultra_endura",
@@ -647,6 +1057,17 @@
     "status": "approved",
     "en": "A professional paper with higher saturation.",
     "zh": "专业相纸，饱和度较高。"
+   },
+   "traits": {
+    "contrast": {
+     "value": 1.651504573204922,
+     "level": 4
+    },
+    "saturation": {
+     "value": 1.441848397009155,
+     "level": 3
+    },
+    "measuredWith": "kodak_portra_400"
    }
   },
   {
@@ -673,7 +1094,26 @@
    "tags": [
     "everyday",
     "vintage"
-   ]
+   ],
+   "traits": {
+    "contrast": {
+     "value": 1.2777082420034747,
+     "level": 2
+    },
+    "saturation": {
+     "value": 1.2745279951893083,
+     "level": 2
+    },
+    "latitude": {
+     "value": 11.158199337633786,
+     "level": 3
+    },
+    "grain": {
+     "value": 30.839486962497126,
+     "level": 2
+    },
+    "measuredWith": "kodak_portra_endura"
+   }
   },
   {
    "id": "kodak_verita_200d",
@@ -699,7 +1139,26 @@
    },
    "tags": [
     "cinematic"
-   ]
+   ],
+   "traits": {
+    "contrast": {
+     "value": 1.2074296249053018,
+     "level": 1
+    },
+    "saturation": {
+     "value": 1.1514897998962534,
+     "level": 2
+    },
+    "latitude": {
+     "value": 11.37144528208822,
+     "level": 3
+    },
+    "grain": {
+     "value": 29.26846859369691,
+     "level": 2
+    },
+    "measuredWith": "kodak_2383"
+   }
   },
   {
    "id": "kodak_vision3_200t",
@@ -727,7 +1186,26 @@
    "tags": [
     "tungsten",
     "cinematic"
-   ]
+   ],
+   "traits": {
+    "contrast": {
+     "value": 1.2297216216800149,
+     "level": 2
+    },
+    "saturation": {
+     "value": 1.114473821585518,
+     "level": 2
+    },
+    "latitude": {
+     "value": 12.08487215566663,
+     "level": 4
+    },
+    "grain": {
+     "value": 30.215441086135012,
+     "level": 2
+    },
+    "measuredWith": "kodak_2383"
+   }
   },
   {
    "id": "kodak_vision3_250d",
@@ -753,7 +1231,26 @@
    },
    "tags": [
     "cinematic"
-   ]
+   ],
+   "traits": {
+    "contrast": {
+     "value": 1.2705641050990593,
+     "level": 2
+    },
+    "saturation": {
+     "value": 1.189193049374557,
+     "level": 2
+    },
+    "latitude": {
+     "value": 12.37991907768676,
+     "level": 4
+    },
+    "grain": {
+     "value": 34.40387780484619,
+     "level": 2
+    },
+    "measuredWith": "kodak_2383"
+   }
   },
   {
    "id": "kodak_vision3_500t",
@@ -782,7 +1279,26 @@
     "lowLight",
     "tungsten",
     "cinematic"
-   ]
+   ],
+   "traits": {
+    "contrast": {
+     "value": 1.2696402524745836,
+     "level": 2
+    },
+    "saturation": {
+     "value": 1.0838599501587531,
+     "level": 2
+    },
+    "latitude": {
+     "value": 12.446578029321707,
+     "level": 4
+    },
+    "grain": {
+     "value": 34.85366451114554,
+     "level": 2
+    },
+    "measuredWith": "kodak_2383"
+   }
   },
   {
    "id": "kodak_vision3_50d",
@@ -810,7 +1326,26 @@
    "tags": [
     "landscape",
     "cinematic"
-   ]
+   ],
+   "traits": {
+    "contrast": {
+     "value": 1.2608474131544294,
+     "level": 2
+    },
+    "saturation": {
+     "value": 1.1698059732705708,
+     "level": 2
+    },
+    "latitude": {
+     "value": 11.716958407948328,
+     "level": 4
+    },
+    "grain": {
+     "value": 29.15212815201408,
+     "level": 2
+    },
+    "measuredWith": "kodak_2383"
+   }
   }
  ]
 }
