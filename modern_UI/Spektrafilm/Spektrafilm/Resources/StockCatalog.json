@@ -12,6 +12,18 @@
    "cover": null,
    "formats": [
     "135"
+   ],
+   "iso": 200,
+   "illuminant": "D55",
+   "antihalation": "weak",
+   "guide": {
+    "status": "approved",
+    "en": "Fujifilm's entry-level consumer negative: light colour, an everyday snapshot film.",
+    "zh": "富士入门级民用负片，色彩清淡，常见于日常快照。"
+   },
+   "tags": [
+    "everyday",
+    "vintage"
    ]
   },
   {
@@ -23,7 +35,14 @@
    "targetPrint": null,
    "hasPreviewLUT": true,
    "pairedFilm": "fujifilm_pro_400h",
-   "cover": null
+   "cover": null,
+   "illuminant": "TH-KG3",
+   "antihalation": "strong",
+   "guide": {
+    "status": "approved",
+    "en": "Fujifilm's colour paper, the default for Fujifilm negatives.",
+    "zh": "富士彩色相纸，富士负片的默认搭配。"
+   }
   },
   {
    "id": "fujifilm_neopan_acros_100_ii",
@@ -39,6 +58,18 @@
    "formats": [
     "135",
     "120"
+   ],
+   "iso": 100,
+   "illuminant": "D55",
+   "antihalation": "weak",
+   "guide": {
+    "status": "approved",
+    "en": "A black-and-white film with very fine grain and smooth tones.",
+    "zh": "颗粒很细、影调细腻的黑白胶片。"
+   },
+   "tags": [
+    "landscape",
+    "bw"
    ]
   },
   {
@@ -54,6 +85,17 @@
    "formats": [
     "135",
     "120"
+   ],
+   "iso": 400,
+   "illuminant": "D55",
+   "antihalation": "strong",
+   "guide": {
+    "status": "approved",
+    "en": "Soft colour leaning cyan-green, often used for bright portraits and weddings.",
+    "zh": "色调清淡、偏青绿，常用于明亮的人像和婚礼。"
+   },
+   "tags": [
+    "portrait"
    ]
   },
   {
@@ -69,6 +111,17 @@
    "formats": [
     "135",
     "120"
+   ],
+   "iso": 100,
+   "illuminant": "D55",
+   "antihalation": "strong",
+   "guide": {
+    "status": "approved",
+    "en": "A slide film with relatively neutral, accurate colour.",
+    "zh": "色彩相对中性、准确的反转片。"
+   },
+   "tags": [
+    "landscape"
    ]
   },
   {
@@ -84,6 +137,17 @@
    "formats": [
     "135",
     "120"
+   ],
+   "iso": 100,
+   "illuminant": "D55",
+   "antihalation": "strong",
+   "guide": {
+    "status": "approved",
+    "en": "A slide film with very high saturation and strong contrast, a landscape favourite.",
+    "zh": "饱和度很高、反差强，风光摄影常用。"
+   },
+   "tags": [
+    "landscape"
    ]
   },
   {
@@ -99,6 +163,18 @@
    "formats": [
     "135",
     "120"
+   ],
+   "iso": 400,
+   "illuminant": "D55",
+   "antihalation": "weak",
+   "guide": {
+    "status": "approved",
+    "en": "Fujifilm's fast consumer negative, for everyday shooting and middling light.",
+    "zh": "富士民用高感负片，日常和光线一般的场景都能用。"
+   },
+   "tags": [
+    "everyday",
+    "vintage"
    ]
   },
   {
@@ -115,6 +191,19 @@
    "formats": [
     "135",
     "120"
+   ],
+   "iso": 400,
+   "illuminant": "D55",
+   "antihalation": "weak",
+   "guide": {
+    "status": "approved",
+    "en": "A black-and-white film with wide latitude and visible grain, common in street and documentary work.",
+    "zh": "宽容度大、颗粒明显的黑白胶片，纪实街拍常用。"
+   },
+   "tags": [
+    "everyday",
+    "lowLight",
+    "bw"
    ]
   },
   {
@@ -127,7 +216,14 @@
    "hasPreviewLUT": false,
    "pairedFilm": null,
    "cover": null,
-   "monochrome": true
+   "monochrome": true,
+   "illuminant": "TH-KG3",
+   "antihalation": "strong",
+   "guide": {
+    "status": "approved",
+    "en": "A variable-contrast resin-coated black-and-white paper; every black-and-white film in this app prints on it.",
+    "zh": "可变反差的树脂涂层黑白相纸，本应用的黑白胶片都印在它上面。"
+   }
   },
   {
    "id": "kodak_2383",
@@ -138,7 +234,14 @@
    "targetPrint": null,
    "hasPreviewLUT": true,
    "pairedFilm": "kodak_vision3_250d",
-   "cover": null
+   "cover": null,
+   "illuminant": "TH-KG3",
+   "antihalation": "strong",
+   "guide": {
+    "status": "approved",
+    "en": "The standard cinema release print film, the other half of the cinematic pairing.",
+    "zh": "影院放映拷贝的标准片种，“电影感”组合的另一半。"
+   }
   },
   {
    "id": "kodak_2393",
@@ -149,7 +252,14 @@
    "targetPrint": null,
    "hasPreviewLUT": true,
    "pairedFilm": "kodak_vision3_250d",
-   "cover": null
+   "cover": null,
+   "illuminant": "TH-KG3",
+   "antihalation": "strong",
+   "guide": {
+    "status": "approved",
+    "en": "A premium release print film with higher contrast and saturation.",
+    "zh": "高端放映拷贝片，反差和饱和度更高。"
+   }
   },
   {
    "id": "kodak_ektachrome_100",
@@ -166,6 +276,17 @@
     "120",
     "16mm",
     "super8"
+   ],
+   "iso": 100,
+   "illuminant": "D55",
+   "antihalation": "strong",
+   "guide": {
+    "status": "approved",
+    "en": "A slide film with clean colour.",
+    "zh": "色彩干净的反转片。"
+   },
+   "tags": [
+    "landscape"
    ]
   },
   {
@@ -177,7 +298,14 @@
    "targetPrint": null,
    "hasPreviewLUT": true,
    "pairedFilm": "kodak_portra_400",
-   "cover": null
+   "cover": null,
+   "illuminant": "TH-KG3",
+   "antihalation": "strong",
+   "guide": {
+    "status": "approved",
+    "en": "Kodak's colour paper.",
+    "zh": "柯达彩色相纸。"
+   }
   },
   {
    "id": "kodak_ektar_100",
@@ -192,6 +320,17 @@
    "formats": [
     "135",
     "120"
+   ],
+   "iso": 100,
+   "illuminant": "D55",
+   "antihalation": "strong",
+   "guide": {
+    "status": "approved",
+    "en": "Very fine grain and high saturation, for landscapes and travel.",
+    "zh": "颗粒很细、饱和度高，适合风景和旅行。"
+   },
+   "tags": [
+    "landscape"
    ]
   },
   {
@@ -203,7 +342,14 @@
    "targetPrint": null,
    "hasPreviewLUT": true,
    "pairedFilm": "kodak_portra_400",
-   "cover": null
+   "cover": null,
+   "illuminant": "TH-KG3",
+   "antihalation": "strong",
+   "guide": {
+    "status": "approved",
+    "en": "Kodak's professional colour paper.",
+    "zh": "柯达专业彩色相纸。"
+   }
   },
   {
    "id": "kodak_gold_200",
@@ -218,6 +364,18 @@
    "formats": [
     "135",
     "120"
+   ],
+   "iso": 200,
+   "illuminant": "D55",
+   "antihalation": "weak",
+   "guide": {
+    "status": "approved",
+    "en": "A warm consumer negative with a nostalgic look.",
+    "zh": "偏暖的民用负片，带怀旧感。"
+   },
+   "tags": [
+    "everyday",
+    "vintage"
    ]
   },
   {
@@ -233,6 +391,18 @@
    "formats": [
     "135",
     "120"
+   ],
+   "iso": 64,
+   "illuminant": "D55",
+   "antihalation": "weak",
+   "guide": {
+    "status": "approved",
+    "en": "The classic slide film: rich colour with a sense of its era.",
+    "zh": "经典老牌反转片，色彩浓郁、带年代感。"
+   },
+   "tags": [
+    "landscape",
+    "vintage"
    ]
   },
   {
@@ -248,6 +418,17 @@
    "formats": [
     "135",
     "120"
+   ],
+   "iso": 160,
+   "illuminant": "D55",
+   "antihalation": "strong",
+   "guide": {
+    "status": "approved",
+    "en": "A slow portrait negative: soft skin tones, low contrast.",
+    "zh": "低感人像负片，肤色柔和、反差低。"
+   },
+   "tags": [
+    "portrait"
    ]
   },
   {
@@ -263,6 +444,18 @@
    "formats": [
     "135",
     "120"
+   ],
+   "iso": 400,
+   "illuminant": "D55",
+   "antihalation": "strong",
+   "guide": {
+    "status": "approved",
+    "en": "One of the most used portrait negatives: natural skin tones, wide latitude.",
+    "zh": "最常用的人像负片之一，肤色自然、宽容度大。"
+   },
+   "tags": [
+    "portrait",
+    "everyday"
    ]
   },
   {
@@ -278,6 +471,18 @@
    "formats": [
     "135",
     "120"
+   ],
+   "iso": 800,
+   "illuminant": "D55",
+   "antihalation": "strong",
+   "guide": {
+    "status": "approved",
+    "en": "A fast portrait negative for dimmer light.",
+    "zh": "高感人像负片，适合光线较暗的场景。"
+   },
+   "tags": [
+    "portrait",
+    "lowLight"
    ]
   },
   {
@@ -293,6 +498,18 @@
    "formats": [
     "135",
     "120"
+   ],
+   "iso": 800,
+   "push": 1,
+   "illuminant": "D55",
+   "antihalation": "strong",
+   "guide": {
+    "status": "approved",
+    "en": "Portra 800 pushed one stop in development: more contrast.",
+    "zh": "Portra 800 增感一档冲洗，反差更强。"
+   },
+   "tags": [
+    "lowLight"
    ]
   },
   {
@@ -308,6 +525,18 @@
    "formats": [
     "135",
     "120"
+   ],
+   "iso": 800,
+   "push": 2,
+   "illuminant": "D55",
+   "antihalation": "strong",
+   "guide": {
+    "status": "approved",
+    "en": "Portra 800 pushed two stops: more contrast, for very dark scenes.",
+    "zh": "Portra 800 增感两档冲洗，反差更强，适合很暗的环境。"
+   },
+   "tags": [
+    "lowLight"
    ]
   },
   {
@@ -319,7 +548,14 @@
    "targetPrint": null,
    "hasPreviewLUT": true,
    "pairedFilm": "kodak_portra_400",
-   "cover": null
+   "cover": null,
+   "illuminant": "TH-KG3",
+   "antihalation": "strong",
+   "guide": {
+    "status": "approved",
+    "en": "A professional paper aimed at portraits, with softer contrast.",
+    "zh": "面向人像的专业相纸，反差较柔。"
+   }
   },
   {
    "id": "kodak_supra_endura",
@@ -330,7 +566,14 @@
    "targetPrint": null,
    "hasPreviewLUT": true,
    "pairedFilm": "kodak_portra_400",
-   "cover": null
+   "cover": null,
+   "illuminant": "TH-KG3",
+   "antihalation": "strong",
+   "guide": {
+    "status": "approved",
+    "en": "A professional paper with medium contrast; this app's default paper.",
+    "zh": "专业相纸，反差居中；本应用的默认相纸。"
+   }
   },
   {
    "id": "kodak_tmax_100",
@@ -346,6 +589,18 @@
    "formats": [
     "135",
     "120"
+   ],
+   "iso": 100,
+   "illuminant": "D55",
+   "antihalation": "weak",
+   "guide": {
+    "status": "approved",
+    "en": "A modern black-and-white film with very fine grain: sharp and clean.",
+    "zh": "颗粒非常细的现代黑白胶片，锐利干净。"
+   },
+   "tags": [
+    "landscape",
+    "bw"
    ]
   },
   {
@@ -362,6 +617,18 @@
    "formats": [
     "135",
     "120"
+   ],
+   "iso": 400,
+   "illuminant": "D55",
+   "antihalation": "weak",
+   "guide": {
+    "status": "approved",
+    "en": "The classic black-and-white film: visible grain, bold contrast, the documentary standard.",
+    "zh": "经典黑白胶片，颗粒感和反差鲜明，纪实摄影的代表。"
+   },
+   "tags": [
+    "everyday",
+    "bw"
    ]
   },
   {
@@ -373,7 +640,14 @@
    "targetPrint": null,
    "hasPreviewLUT": true,
    "pairedFilm": "kodak_portra_400",
-   "cover": null
+   "cover": null,
+   "illuminant": "TH-KG3",
+   "antihalation": "strong",
+   "guide": {
+    "status": "approved",
+    "en": "A professional paper with higher saturation.",
+    "zh": "专业相纸，饱和度较高。"
+   }
   },
   {
    "id": "kodak_ultramax_400",
@@ -387,6 +661,18 @@
    "cover": "kodak_ultramax_400.jpg",
    "formats": [
     "135"
+   ],
+   "iso": 400,
+   "illuminant": "D55",
+   "antihalation": "weak",
+   "guide": {
+    "status": "approved",
+    "en": "Kodak's fast consumer negative: warm, made for snapshots.",
+    "zh": "柯达民用高感负片，偏暖，适合随手拍。"
+   },
+   "tags": [
+    "everyday",
+    "vintage"
    ]
   },
   {
@@ -402,6 +688,17 @@
    "formats": [
     "16mm",
     "35mm_motion"
+   ],
+   "iso": 200,
+   "illuminant": "D55",
+   "antihalation": "strong",
+   "guide": {
+    "status": "draft",
+    "en": "",
+    "zh": ""
+   },
+   "tags": [
+    "cinematic"
    ]
   },
   {
@@ -418,6 +715,18 @@
     "16mm",
     "super8",
     "35mm_motion"
+   ],
+   "iso": 200,
+   "illuminant": "T",
+   "antihalation": "strong",
+   "guide": {
+    "status": "approved",
+    "en": "A motion-picture negative balanced for tungsten light (its profile's reference illuminant is T).",
+    "zh": "按钨丝灯平衡的电影负片（配置的参考光源为 T）。"
+   },
+   "tags": [
+    "tungsten",
+    "cinematic"
    ]
   },
   {
@@ -433,6 +742,17 @@
    "formats": [
     "16mm",
     "35mm_motion"
+   ],
+   "iso": 250,
+   "illuminant": "D55",
+   "antihalation": "strong",
+   "guide": {
+    "status": "approved",
+    "en": "A daylight motion-picture negative, one of the most common sources of the cinematic look.",
+    "zh": "日光型电影负片，“电影感”最常见的来源之一。"
+   },
+   "tags": [
+    "cinematic"
    ]
   },
   {
@@ -449,6 +769,19 @@
     "16mm",
     "super8",
     "35mm_motion"
+   ],
+   "iso": 500,
+   "illuminant": "T",
+   "antihalation": "strong",
+   "guide": {
+    "status": "approved",
+    "en": "A fast tungsten-balanced motion-picture negative, common for night scenes and interiors.",
+    "zh": "高感灯光型电影负片，夜景和室内常用。"
+   },
+   "tags": [
+    "lowLight",
+    "tungsten",
+    "cinematic"
    ]
   },
   {
@@ -465,6 +798,18 @@
     "16mm",
     "super8",
     "35mm_motion"
+   ],
+   "iso": 50,
+   "illuminant": "D55",
+   "antihalation": "strong",
+   "guide": {
+    "status": "approved",
+    "en": "A slow daylight motion-picture negative with fine grain.",
+    "zh": "低感日光型电影负片，颗粒细。"
+   },
+   "tags": [
+    "landscape",
+    "cinematic"
    ]
   }
  ]

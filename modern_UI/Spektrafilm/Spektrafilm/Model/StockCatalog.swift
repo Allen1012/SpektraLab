@@ -23,6 +23,24 @@ struct Stock: Codable, Identifiable, Hashable, Sendable {
     /// A black-and-white stock: a film with one silver emulsion, or a silver
     /// paper (the profile's `channel_model` is `bw`). Absent on colour stocks.
     let monochrome: Bool?
+    // PRD/PRD-胶片指南卡片与风格.md §3, §6: what the card shows. All optional,
+    // so a catalogue generated before the guide existed still decodes.
+    /// The speed in the film's name (`Tools/gen-catalog.py`). Films only.
+    let iso: Int?
+    /// Stops of push development, for the two pushed Portra 800 profiles.
+    let push: Int?
+    /// The profile's reference illuminant: `D55` daylight, `T` tungsten.
+    let illuminant: String?
+    /// The profile's anti-halation tag: `strong` or `weak`.
+    let antihalation: String?
+    /// Scene tags, already merged with the ones the data decides. Films only.
+    let tags: [String]?
+    /// The card's one-line description and its review state.
+    let guide: StockGuide?
+    /// Measured traits (`engine/tests/stock_traits.py`); nil until measured.
+    let traits: StockTraits?
+    /// The designer's illustration in `Resources/StockArt/`; nil until drawn.
+    let art: String?
 
     var isMonochrome: Bool { monochrome ?? false }
     var isFilm: Bool { stage == "filming" }

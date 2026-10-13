@@ -29,6 +29,9 @@ struct LeftPanel: View {
         s.append(("navigator", AnyView(NavigatorSection(session: session))))
         if isPair { s.append((PairSection.key, AnyView(PairSection(session: session)))) }
         s.append(("clipboard", AnyView(ClipboardSection(session: session))))
+        // A style is a kept paste, so it sits under the clipboard and above
+        // the film it chooses (PRD §5.1).
+        if FeatureFlags.styles { s.append(("styles", AnyView(StyleSection(session: session)))) }
         s.append(("film", AnyView(FilmSection(session: session))))
         // Under Film, before Print: both belong to the film and depend on
         // neither the paper nor the DI (2026-10-01 drawings).

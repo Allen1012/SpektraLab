@@ -7,6 +7,8 @@ profile library, so the app never parses the 5.6 MB of sensitometric JSON.
 from __future__ import annotations
 
 import json
+import re
+import shutil
 import subprocess
 from pathlib import Path
 
@@ -28,6 +30,64 @@ PRODUCT_PROFILES = REPO / "engine/resources_product/profiles"
 PRINT_LUTS = REPO / "engine/resources/print_luts.json"
 COVERS_SRC = REPO / "modern_UI/film_covers"
 OUT = HERE / "Spektrafilm/Resources"
+# PRD/PRD-胶片指南卡片与风格.md §6: the card copy (hand-written), the measured
+# traits (`engine/tests/stock_traits.py`, absent until it has been run) and
+# the designer's illustrations (`<id>.svg`, absent until they are drawn).
+GUIDE = REPO / "modern_UI/stock_guide.json"
+TRAITS = REPO / "modern_UI/stock_traits.json"
+ART_SRC = REPO / "modern_UI/stock_art"
+
+# The scene vocabulary, in the order the filter shows it (PRD §4.2). Four are
+# derived from data below; the rest come only from the guide's hand-written tags.
+SCENES = ["portrait", "landscape", "everyday", "lowLight", "tungsten", "cinematic", "vintage", "bw"]
+TRAIT_KEYS = ["contrast", "saturation", "latitude", "grain"]
+
+
+def film_speed(name: str) -> int | None:
+    """The ISO in a film's name: "Portra 400" 400, "Vision3 250D" 250, "C200"
+    200, "Pro 400H" 400. A single digit (Vision3, HP5) is not a speed."""
+    m = re.search(r"(?<!\d)(\d{2,4})(?:[A-Z]{0,2})?(?![\d])", name.replace("Vision3", "Vision"))
+    return int(m.group(1)) if m else None
+
+
+def push_stops(sid: str) -> int | None:
+    m = re.search(r"_push(\d)$", sid)
+    return int(m.group(1)) if m else None
+
+
+def derived_scenes(entry: dict, info: dict) -> list[str]:
+    """The tags the data decides, so nobody has to keep them in step by hand."""
+    out = []
+    if entry["stage"] != "filming":
+        return out
+    if (entry.get("iso") or 0) >= 500 or entry.get("push"):
+        out.append("lowLight")
+    if info.get("reference_illuminant") == "T":
+        out.append("tungsten")
+    if entry["use"] == "cine":
+        out.append("cinematic")
+    if entry.get("monochrome"):
+        out.append("bw")
+    return out
+
+
+def levels(stocks: list[dict]) -> None:
+    """Five dots per trait, **linear over the measured range**, films and papers
+    apart. Not quantiles: a quantile spreads stocks that measure the same over
+    all five dots, and the colour negatives' grain is exactly that case
+    (research/colour-film-granularity.md §3), so a quantile would invent a
+    difference the picture does not have."""
+    for stage in ("filming", "printing"):
+        group = [s for s in stocks if s["stage"] == stage and "traits" in s]
+        for key in TRAIT_KEYS:
+            vals = [s["traits"][key]["value"] for s in group if key in s["traits"]]
+            if not vals:
+                continue
+            lo, hi = min(vals), max(vals)
+            for s in group:
+                t = s["traits"].get(key)
+                if t is not None:
+                    t["level"] = 3 if hi - lo < 1e-9 else 1 + round(4 * (t["value"] - lo) / (hi - lo))
 
 # stock id -> substring of the cover filename
 COVERS = {
@@ -85,6 +145,11 @@ FORMATS = {
 def main() -> None:
     (OUT / "FilmCovers").mkdir(parents=True, exist_ok=True)
     luts = json.loads(PRINT_LUTS.read_text())
+    guide = json.loads(GUIDE.read_text())["stocks"] if GUIDE.exists() else {}
+    traits = json.loads(TRAITS.read_text())["stocks"] if TRAITS.exists() else {}
+    art_out = OUT / "StockArt"
+    if ART_SRC.is_dir() and any(ART_SRC.glob("*.svg")):
+        art_out.mkdir(parents=True, exist_ok=True)
     stocks = []
     for path in sorted([*PROFILES.glob("*.json"), *PRODUCT_PROFILES.glob("*.json")], key=lambda f: f.stem):
         info = json.loads(path.read_text())["info"]
@@ -113,9 +178,41 @@ def main() -> None:
             entry["monochrome"] = True         # one silver emulsion (a film) or a silver paper
         if sid in FORMATS:
             entry["formats"] = FORMATS[sid]
+        if entry["stage"] == "filming":
+            iso = film_speed(entry["name"])
+            if iso:
+                entry["iso"] = iso
+            if push_stops(sid):
+                entry["push"] = push_stops(sid)
+        if info.get("reference_illuminant"):
+            entry["illuminant"] = info["reference_illuminant"]
+        if info.get("antihalation"):
+            entry["antihalation"] = info["antihalation"]
+        g = guide.get(sid)
+        if g is not None:
+            entry["guide"] = {"status": g.get("status", "draft"), "en": g.get("en", ""), "zh": g.get("zh", "")}
+            tags = set(g.get("tags", [])) | set(derived_scenes(entry, info))
+            unknown = tags - set(SCENES)
+            if unknown:
+                raise SystemExit(f"{sid}: unknown scene tags {sorted(unknown)}")
+            if entry["stage"] == "filming":
+                entry["tags"] = [s for s in SCENES if s in tags]
+        else:
+            print(f"warning: {sid} has no entry in {GUIDE.name}")
+        t = traits.get(sid)
+        if t is not None:
+            entry["traits"] = {k: {"value": float(t[k])} for k in TRAIT_KEYS if t.get(k) is not None}
+            if t.get("measuredWith"):
+                entry["traits"]["measuredWith"] = t["measuredWith"]
+        art = ART_SRC / f"{sid}.svg"
+        if art.exists():
+            shutil.copyfile(art, art_out / art.name)
+            entry["art"] = art.name
         stocks.append(entry)
-    (OUT / "StockCatalog.json").write_text(json.dumps({"stocks": stocks}, indent=1))
-    print(f"wrote {len(stocks)} stocks")
+    levels(stocks)
+    (OUT / "StockCatalog.json").write_text(json.dumps({"stocks": stocks}, indent=1, ensure_ascii=False))
+    print(f"wrote {len(stocks)} stocks ({sum('guide' in s for s in stocks)} with a guide, "
+          f"{sum('traits' in s for s in stocks)} with traits, {sum('art' in s for s in stocks)} with art)")
 
 
 if __name__ == "__main__":

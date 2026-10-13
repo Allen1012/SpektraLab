@@ -17,6 +17,11 @@ struct FilmSection: View {
     static let wellRows = 9
 
     @Bindable var session: Session
+    /// The scene filter (PRD §4). Not persisted: the list opens whole, so a
+    /// filter left on yesterday cannot hide a film today.
+    @State private var scene: FilmScene?
+    /// The "•••" item "About this film".
+    @State private var aboutShown = false
 
     var body: some View {
         PanelSection(L(.sectionFilm), key: "film",
@@ -30,12 +35,53 @@ struct FilmSection: View {
                          session.applyFilmStageRule()
                      },
                      menu: { AnyView(menu) }) {
-            StockList(rows: stockRows,
-                      selected: session.params.filmStock,
-                      visibleRows: Self.wellRows) { id in
-                select(id)
+            VStack(alignment: .leading, spacing: 0) {
+                if FeatureFlags.filmGuide { sceneChips }
+                StockList(rows: stockRows,
+                          selected: session.params.filmStock,
+                          visibleRows: Self.wellRows,
+                          card: FeatureFlags.filmGuide ? { card(for: $0) } : nil) { id in
+                    select(id)
+                }
+                .popover(isPresented: $aboutShown, arrowEdge: .trailing) {
+                    card(for: session.params.filmStock)
+                }
             }
         }
+    }
+
+    /// The film's card, or nil for a caption row.
+    private func card(for id: String) -> AnyView? {
+        guard let stock = session.catalog.stock(id), stock.isFilm else { return nil }
+        return AnyView(StockCard(stock: stock, catalog: session.catalog))
+    }
+
+    /// "All" and the eight scenes (PRD §4.2). A second click on the chosen
+    /// scene clears it, as "All" does.
+    private var sceneChips: some View {
+        FlowLayout(spacing: 4, lineSpacing: 4) {
+            chip(L("All", zh: "全部"), on: scene == nil) { scene = nil }
+            ForEach(FilmScene.allCases) { s in
+                chip(s.title, on: scene == s) { scene = scene == s ? nil : s }
+            }
+        }
+        .padding(.leading, Theme.Metric.stockTextLeadingInset)
+        .padding(.trailing, 8)
+        .padding(.bottom, 4)
+    }
+
+    private func chip(_ title: String, on: Bool, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Text(title)
+                .font(Theme.Font.meta)
+                .foregroundStyle(on ? Theme.onSelection : Theme.Ink.secondary)
+                .padding(.horizontal, 6)
+                .frame(height: 15)
+                .background(on ? Theme.selection : Theme.pill, in: Capsule())
+                .contentShape(Capsule())
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(on ? .isSelected : [])
     }
 
     /// Positive and Negative, as two visible groups — v3's own division, and
@@ -44,32 +90,52 @@ struct FilmSection: View {
     /// catalogue with no slide films shows one list rather than an empty
     /// caption.
     private var stockRows: [StockList.Row] {
-        session.catalog.filmGroups.filter { !$0.films.isEmpty }.flatMap { group in
+        let groups = FeatureFlags.filmGuide
+            ? session.catalog.filmGroups(scene: scene, keeping: session.params.filmStock)
+            : session.catalog.filmGroups
+        return groups.filter { !$0.films.isEmpty }.flatMap { group in
             // The id keeps the catalogue's English title — it is the row's
             // identity — while the *name* is what the spec translates. A film
             // entry's own name is a profile name and stays as it is.
             [StockList.Row(id: "__group_" + group.title, name: L(filmGroup: group.title), isHeader: true)]
-            + group.films.map {
-                StockList.Row(id: $0.id, name: $0.name, isCine: $0.isCine, help: "")
-            }
+            + group.films.map { row(for: $0) }
         }
+    }
+
+    /// A film's row. The film in use stays on the list under a filter that
+    /// would drop it, dimmed and saying why (PRD §4.3).
+    private func row(for stock: Stock) -> StockList.Row {
+        guard FeatureFlags.filmGuide else {
+            return StockList.Row(id: stock.id, name: stock.name, isCine: stock.isCine, help: "")
+        }
+        if let scene, !stock.scenes.contains(scene) {
+            let why = String(format: L("In use, though not a “%@” film.", zh: "当前使用中，不属于“%@”。"), scene.title)
+            return StockList.Row(id: stock.id, name: stock.name, isCine: stock.isCine, help: why, dimmed: true)
+        }
+        return StockList.Row(id: stock.id, name: stock.name, isCine: stock.isCine, help: stock.guideHelp)
     }
 
     /// The rule is `Session.selectFilmStock`, which the agent layer shares.
     private func select(_ id: String) { session.selectFilmStock(id) }
 
     private var menu: some View {
-        // The header's arrow is this item; both say the same thing in words,
-        // which is the point of §8.3 — a reset affordance whose scope is not
-        // named is the ellipsis problem again.
-        Button(L("Reset the film stock to Portra 400", zh: "将胶片重置为 Portra 400")) {
-            var p = session.params; p.filmStock = "kodak_portra_400"
-            // Coming back from a black-and-white film, its paper cannot stay.
-            if !session.catalog.canPrint(film: p.filmStock, on: p.printStock) {
-                p.printStock = FilmParams.default.printStock
+        Group {
+            if FeatureFlags.filmGuide {
+                Button(L("About This Film", zh: "关于当前胶片")) { aboutShown = true }
+                Divider()
             }
-            session.params = p
-            session.applyFilmStageRule()
+            // The header's arrow is this item; both say the same thing in words,
+            // which is the point of §8.3 — a reset affordance whose scope is not
+            // named is the ellipsis problem again.
+            Button(L("Reset the film stock to Portra 400", zh: "将胶片重置为 Portra 400")) {
+                var p = session.params; p.filmStock = "kodak_portra_400"
+                // Coming back from a black-and-white film, its paper cannot stay.
+                if !session.catalog.canPrint(film: p.filmStock, on: p.printStock) {
+                    p.printStock = FilmParams.default.printStock
+                }
+                session.params = p
+                session.applyFilmStageRule()
+            }
         }
     }
 }
@@ -108,6 +174,9 @@ struct StockList: View {
         /// Why it cannot be chosen — shown as the row's tooltip, so the greying
         /// is explained where it is seen.
         var disabledReason = ""
+        /// Shown, and choosable, but outside the list's current filter: the
+        /// film in use is kept when a scene filter would drop it (PRD §4.3).
+        var dimmed = false
     }
 
     let rows: [Row]
@@ -130,6 +199,9 @@ struct StockList: View {
     /// alignment and update that assumption rather than blindly reuse the
     /// odd-count rule"). `StockListTests` pins it.
     var visibleRows: Int
+    /// The card a row shows on hover (`StockCardHover`), by row id; nil for
+    /// rows that have none — captions and the paper list's two switches.
+    var card: ((String) -> AnyView?)? = nil
     let select: (String) -> Void
     /// In a section the user has sized (`SectionLayout.swift`) the list takes
     /// whatever height it is offered, at least its own rows.
@@ -152,7 +224,7 @@ struct StockList: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .frame(height: Theme.Metric.listRowHeight)
                         } else {
-                            StockRow(row: row, selected: row.id == selected) { select(row.id) }
+                            StockRow(row: row, selected: row.id == selected, card: card?(row.id)) { select(row.id) }
                                 .id(row.id)
                         }
                     }
@@ -180,6 +252,7 @@ struct StockList: View {
 struct StockRow: View {
     let row: StockList.Row
     let selected: Bool
+    var card: AnyView? = nil
     let action: () -> Void
 
     var body: some View {
@@ -227,7 +300,9 @@ struct StockRow: View {
         .contentShape(Rectangle())
         .onTapGesture(perform: action)
         .rowEnabled(row.enabled, because: row.disabledReason)
+        .opacity(row.dimmed ? Theme.disabledOpacity : 1)
         .help(row.help)
+        .modifier(StockCardHover(card: card))
     }
 
     /// The selection capsule: the drawing's 15.27 in an 18 pt row, and the

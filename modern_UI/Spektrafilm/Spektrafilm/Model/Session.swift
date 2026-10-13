@@ -874,6 +874,9 @@ final class Session: CanvasHost {
     /// reason: a test that injects a `Diagnostics` gets its records too.
     var log: Log { diagnostics.log }
     let catalog = StockCatalog.shared
+    /// The person's own styles (PRD/PRD-胶片指南卡片与风格.md §5.4). Injected so
+    /// a test never reads or writes the real `styles.json`.
+    let styleStore: StyleStore
     private var serviceSessionID: String?
     /// What `isDigitalIntermediate` last answered for a print of the frame on
     /// the canvas, by texture; weak, so it holds nothing alive.
@@ -995,7 +998,9 @@ final class Session: CanvasHost {
     nonisolated static var diskCacheRoot: URL { cacheRoot.appending(path: "store") }
 
     init(renderer: Renderer? = nil, diagnostics: Diagnostics = .shared,
-         diskCache: DiskCacheStore? = nil, clipboardDefaults: UserDefaults = .standard) {
+         diskCache: DiskCacheStore? = nil, clipboardDefaults: UserDefaults = .standard,
+         styleStore: StyleStore? = nil) {
+        self.styleStore = styleStore ?? StyleStore()
         self.clipboardDefaults = clipboardDefaults
         self.clipboardGroups = Self.storedClipboardGroups(in: clipboardDefaults)
         guard let renderer = renderer ?? Renderer(arena: diagnostics.arena) else {
@@ -2986,24 +2991,10 @@ final class Session: CanvasHost {
     /// has already made a pairing of their own. The film list's rule, here so
     /// the agent layer (RFC-026) chooses a film exactly as a click does.
     func selectFilmStock(_ id: String) {
-        var p = params
-        p.filmStock = id
-        if let target = catalog.stock(id)?.targetPrint,
-           catalog.stock(target) != nil,
-           !catalog.isDeclaredPairing(film: p.filmStock, paper: p.printStock) {
-            p.printStock = target
-        }
-        // Between colour and black and white the paper cannot stay: the kept
-        // pairing above is for a paper that can print this film.
-        if !catalog.canPrint(film: id, on: p.printStock) {
-            p.printStock = catalog.stock(id)?.targetPrint ?? FilmParams.default.printStock
-        }
-        params = p
-        // A slide film has no print stage. A positive declares no
-        // `targetPrint`, so the branch above leaves `printStock` where it
-        // was — which is the point: coming back to a negative restores the
-        // paper rather than landing on a default.
-        applyFilmStageRule()
+        // The rule itself is `FilmParams.choosingFilm`, a value, so that a
+        // style written to a frame on disk chooses a film exactly as this
+        // click does (PRD/PRD-胶片指南卡片与风格.md §10).
+        params = params.choosingFilm(id, in: catalog)
     }
 
     /// Choosing a film decides whether there is a print stage at all.
@@ -3797,16 +3788,24 @@ final class Session: CanvasHost {
     /// effect the individual setters would have had.
     @discardableResult
     private func pasteLive(_ clip: SettingsClip) -> Bool {
-        let next = clip.applied(to: sidecar)
+        writeSettingsLive(groups: clip.groups) { clip.applied(to: $0) }
+    }
+
+    /// The paste's live half, for anything that is Sidecar in, Sidecar out —
+    /// the clipboard and a style (PRD/PRD-胶片指南卡片与风格.md §5.2): one undo
+    /// step, then the side effects the individual setters have for `groups`.
+    @discardableResult
+    func writeSettingsLive(groups: Set<ClipboardGroup>, _ transform: (Sidecar) -> Sidecar) -> Bool {
+        let next = transform(sidecar)
         guard next != sidecar else { return false }
         pushUndo()
         let decodeChanged = next.decode != sidecar.decode
         sidecar = next
-        if clip.groups.contains(.filmEffects) { recomputeFilmFormat(beforeOpen: true) }
+        if groups.contains(.filmEffects) { recomputeFilmFormat(beforeOpen: true) }
         // The clip carries a Tone, so the label follows the paste the same way
         // it follows the pill.
-        if clip.groups.contains(.exposure) { retargetSolvedEV() }
-        if clip.groups.contains(.masks) {
+        if groups.contains(.exposure) { retargetSolvedEV() }
+        if groups.contains(.masks) {
             selectedMaskID = sidecar.masks.first?.id
             syncMasks()
         }
@@ -3841,17 +3840,25 @@ final class Session: CanvasHost {
     /// The paste on a frame that is not on the canvas: written to its sidecar
     /// now, rendered when it is next opened. Its resident print is the old
     /// look and `select` would show it first, so it goes (PRD R2).
-    private enum SettingsWriteResult { case unchanged, written, failed }
+    enum SettingsWriteResult { case unchanged, written, failed }
 
     private func pasteOffline(_ clip: SettingsClip, to url: URL) -> SettingsWriteResult {
+        writeSettingsOffline(to: url) { clip.applied(to: $0) }
+    }
+
+    /// The paste's half for a frame that is not on the canvas: written to its
+    /// sidecar at once, its old print dropped and the frame marked stale, so
+    /// it develops with the new settings when it is opened (RFC-027 R2).
+    func writeSettingsOffline(to url: URL, operation: String = "paste",
+                              _ transform: (Sidecar) -> Sidecar) -> SettingsWriteResult {
         let current = Sidecar.load(for: url) ?? Sidecar()
-        var next = clip.applied(to: current)
+        var next = transform(current)
         guard next != current else { return .unchanged }
         next.state = .stale
         do {
             try next.save(for: url)
         } catch {
-            noteFailure(error, operation: "paste", frame: url.lastPathComponent)
+            noteFailure(error, operation: operation, frame: url.lastPathComponent)
             return .failed
         }
         renderer.store.setPrint(nil, for: url)

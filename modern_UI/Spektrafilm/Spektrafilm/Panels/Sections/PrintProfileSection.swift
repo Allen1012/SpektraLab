@@ -49,6 +49,8 @@ struct PrintProfileSection: View {
     static let wellRows = 8
 
     @Bindable var session: Session
+    /// The "•••" item "About this paper".
+    @State private var aboutShown = false
 
     /// The sentinel `StockList` row id for "No Print Profile". It is not a
     /// paper, so it cannot be a `print_stock` value — see `FilmParams.scanFilm`
@@ -90,7 +92,7 @@ struct PrintProfileSection: View {
                 // `Session.selectPrintStock`'s, greyed here so it says why.
                 let prints = session.catalog.canPrint(film: session.params.filmStock, on: $0.id)
                 return StockList.Row(id: $0.id, name: $0.name, isCine: $0.isCine,
-                              help: filmIsPositive ? "" : helpFor($0.id),
+                              help: filmIsPositive ? "" : paperHelp($0),
                               enabled: !filmIsPositive && prints,
                               disabledReason: filmIsPositive ? Self.positiveOnlyReason
                                   : prints ? "" : ($0.isMonochrome ? Self.silverPaperReason : Self.colourPaperReason))
@@ -121,7 +123,8 @@ struct PrintProfileSection: View {
                                     ? Self.positiveID
                                     : session.params.digitalIntermediate ? Self.digitalID
                                     : session.params.printStock,
-                          visibleRows: Self.wellRows) { id in
+                          visibleRows: Self.wellRows,
+                          card: FeatureFlags.filmGuide ? { card(for: $0) } : nil) { id in
                     if id == Self.positiveID {
                         var p = session.params; p.scanFilm = true; p.digitalIntermediate = false
                         session.params = p
@@ -134,6 +137,9 @@ struct PrintProfileSection: View {
                         guard !filmIsPositive else { return }
                         session.selectPrintStock(id)
                     }
+                }
+                .popover(isPresented: $aboutShown, arrowEdge: .trailing) {
+                    card(for: session.params.printStock)
                 }
                 // **Scope, on the row.** EDR is a *print* parameter: it
                 // changes the paper's shoulder and toe in the engine, which
@@ -190,11 +196,30 @@ struct PrintProfileSection: View {
     /// paper's baked LUT was paired with, and only while the fast flip is on.
     private func helpFor(_ stock: String) -> String {
         guard session.fastStockPreview, let entry = session.printLUTStocks[stock] else { return "" }
-        return "Fast flip available — baked against \(entry.pairedFilm)."
+        return L("Fast flip available — baked against \(entry.pairedFilm).",
+                 zh: "可快速切换（查找表按 \(entry.pairedFilm) 烘焙）。")
+    }
+
+    /// The row's tooltip: the card in one sentence, then the fast-flip note.
+    private func paperHelp(_ paper: Stock) -> String {
+        let guide = FeatureFlags.filmGuide ? paper.guideHelp : ""
+        return [guide, helpFor(paper.id)].filter { !$0.isEmpty }.joined(separator: "\n")
+    }
+
+    /// A paper's card, or nil for a caption and for the two switches below the
+    /// papers, which are not stocks (PRD §3.4).
+    private func card(for id: String) -> AnyView? {
+        guard let stock = session.catalog.stock(id), stock.isPaper else { return nil }
+        return AnyView(StockCard(stock: stock, catalog: session.catalog, fastFlipLine: helpFor(id)))
     }
 
     private var menu: some View {
         Group {
+            if FeatureFlags.filmGuide {
+                Button(L("About This Paper", zh: "关于当前相纸")) { aboutShown = true }
+                    .disabled(session.params.scanFilm || filmIsPositive || session.params.digitalIntermediate)
+                Divider()
+            }
             Button(L(.helpUseFilmPaper)) {
                 if let t = session.catalog.stock(session.params.filmStock)?.targetPrint {
                     var p = session.params; p.printStock = t; p.scanFilm = false

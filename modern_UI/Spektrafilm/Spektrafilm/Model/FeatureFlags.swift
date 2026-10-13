@@ -107,6 +107,24 @@ enum FeatureFlags {
     /// surface: reuse is valid only when every kernel writes every texel and
     /// never reads its destination. Debug builds can turn it on with
     /// `SPEKTRAFILM_SCRATCH_POOL=1`; release builds never do.
+    /// PRD/PRD-胶片指南卡片与风格.md: the film and paper cards and the scene
+    /// filter on the film list. **Debug only** until the card copy is approved
+    /// and the drawing is settled (PRD §9), the way black and white came in.
+    nonisolated static let filmGuide: Bool = {
+#if DEBUG
+        true
+#else
+        false
+#endif
+    }()
+    /// The Styles section on the left rail (PRD §5). Debug only, as `filmGuide`.
+    nonisolated static let styles: Bool = {
+#if DEBUG
+        true
+#else
+        false
+#endif
+    }()
     static let scratchPool: Bool = {
 #if DEBUG
         ProcessInfo.processInfo.environment["SPEKTRAFILM_SCRATCH_POOL"] == "1"
